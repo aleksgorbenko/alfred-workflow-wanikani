@@ -1,0 +1,35 @@
+[tool.pytest.ini_options]
+pythonpath = ["src/wkapi"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes (unused imports/vars, undefined names)
+    "I",    # isort (import sorting)
+    "UP",   # pyupgrade (modernize syntax to target-version)
+    "B",    # flake8-bugbear (likely bugs, e.g. closures over loop variables)
+    "SIM",  # flake8-simplify (more idiomatic equivalents)
+    "N",    # pep8-naming
+    "C4",   # flake8-comprehensions
+    "A",    # flake8-builtins (don't shadow builtins)
+    "ARG",  # flake8-unused-arguments
+    "RET",  # flake8-return (return statement issues)
+    "RUF",  # ruff-specific rules
+    "PERF", # perflint (performance anti-patterns)
+    "PLR",  # pylint refactor (includes too-many-branches/statements)
+]
+ignore = [
+    # RUF001: flags "ambiguous" unicode in string literals (homoglyph risk).
+    # Real hits here are all intentional: curly quotes we match against to
+    # normalize them, and Mathematical Bold digit/letter glyphs used as a
+    # plain-text bold hack for Alfred's subtitle field (no markup support).
+    "RUF001",
+]
+
+[tool.ruff.format]
+quote-style = "double"
