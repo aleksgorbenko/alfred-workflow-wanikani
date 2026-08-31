@@ -56,3 +56,5 @@ make link-live WORKFLOW_DIR=/path/to/installed/workflow    # symlink src/ for li
 
 - [2Do for Alfred](https://github.com/aleksgorbenko/alfred-workflow-2do)
 - [BunPro for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bunpro)
+- [Discogs for Alfred](https://github.com/aleksgorbenko/alfred-workflow-discogs)
+- [Bandcamp for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bandcamp)
