@@ -3,7 +3,7 @@
 import sys
 import urllib.parse
 
-from alfred_items import TYPE_ICONS, bold, emit, error_item, item
+from alfred_items import TYPE_ICONS, emit, error_item, item
 from wanikani_api import WanikaniError
 from wanikani_search import search
 
@@ -16,7 +16,7 @@ def _title(entry: dict[str, str]) -> str:
 
 
 def _subtitle(entry: dict[str, str]) -> str:
-    segments = [bold(entry["type"].title()), entry["reading"]]
+    segments = [entry["type"].title(), entry["reading"]]
     return "・".join(segment for segment in segments if segment)
 
 

@@ -2,7 +2,7 @@
 
 import datetime as dt
 
-from alfred_items import TYPE_ICONS, bold, item
+from alfred_items import TYPE_ICONS, item
 
 DASHBOARD_URL = "https://www.wanikani.com/dashboard"
 SUBJECTS_TTL = 3 * 60 * 60
@@ -53,7 +53,7 @@ def build_items(
 
         subject_type = subject.get("subject_type", "").replace("_", " ").title()
         level = subject.get("level")
-        segments = [bold(f"W{level}") if level else "", subject_type]
+        segments = [f"W{level}" if level else "", subject_type]
 
         parts_of_speech = subject.get("parts_of_speech")
         if parts_of_speech:

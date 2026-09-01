@@ -19,7 +19,7 @@ def test_title_is_character_and_meaning_subtitle_has_level_type_and_part_of_spee
     items = build_items([2467], subjects_by_id, EMPTY_MESSAGE)
 
     assert items[0]["title"] == "一 - One"
-    assert items[0]["subtitle"] == "𝐖𝟓・Vocabulary・numeral"
+    assert items[0]["subtitle"] == "W5・Vocabulary・numeral"
 
 
 def test_kanji_has_no_part_of_speech_segment():
@@ -35,7 +35,7 @@ def test_kanji_has_no_part_of_speech_segment():
     items = build_items([440], subjects_by_id, EMPTY_MESSAGE)
 
     assert items[0]["title"] == "大 - Big"
-    assert items[0]["subtitle"] == "𝐖𝟏・Kanji"
+    assert items[0]["subtitle"] == "W1・Kanji"
 
 
 def test_kana_vocabulary_type_is_two_words():
@@ -50,7 +50,7 @@ def test_kana_vocabulary_type_is_two_words():
 
     items = build_items([1], subjects_by_id, EMPTY_MESSAGE)
 
-    assert items[0]["subtitle"] == "𝐖𝟏𝟐・Kana Vocabulary"
+    assert items[0]["subtitle"] == "W12・Kana Vocabulary"
 
 
 def test_hyphenates_na_i_no_adjectives():
@@ -66,7 +66,7 @@ def test_hyphenates_na_i_no_adjectives():
 
     items = build_items([1], subjects_by_id, EMPTY_MESSAGE)
 
-    expected = "𝐖𝟑・Vocabulary・な-adjective, い-adjective, の-adjective"
+    expected = "W3・Vocabulary・な-adjective, い-adjective, の-adjective"
     assert items[0]["subtitle"] == expected
 
 
@@ -83,7 +83,7 @@ def test_leaves_other_parts_of_speech_untouched():
 
     items = build_items([1], subjects_by_id, EMPTY_MESSAGE)
 
-    assert items[0]["subtitle"] == "𝐖𝟏𝟏・Vocabulary・noun"
+    assert items[0]["subtitle"] == "W11・Vocabulary・noun"
 
 
 def test_relabels_verbal_noun_to_avoid_clash_with_suru_verb():
@@ -106,8 +106,8 @@ def test_relabels_verbal_noun_to_avoid_clash_with_suru_verb():
 
     items = build_items([1, 2], subjects_by_id, EMPTY_MESSAGE)
 
-    assert items[0]["subtitle"] == "𝐖𝟐𝟎・Vocabulary・noun, verbal noun (する)"
-    assert items[1]["subtitle"] == "𝐖𝟐𝟎・Vocabulary・する verb"
+    assert items[0]["subtitle"] == "W20・Vocabulary・noun, verbal noun (する)"
+    assert items[1]["subtitle"] == "W20・Vocabulary・する verb"
 
 
 def test_falls_back_to_slug_then_id_when_no_meaning():
