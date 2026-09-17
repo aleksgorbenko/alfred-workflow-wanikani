@@ -328,7 +328,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>wks</string>
+				<string>{var:WANIKANI_SEARCH_KEYWORD}</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -774,7 +774,7 @@
 				<key>items</key>
 				<string>[{"title": "Summary", "subtitle": "Lessons and reviews available right now", "arg": "summary", "imagefile": "icon_summary.png"}, {"title": "Levels", "subtitle": "Level history and time spent per level", "arg": "levels", "imagefile": "icon_levels.png"}, {"title": "Stats", "subtitle": "SRS stage breakdown (Apprentice/Guru/Master/Enlightened/Burned)", "arg": "stats", "imagefile": "icon_stats.png"}, {"title": "Accuracy", "subtitle": "Overall, meaning, and reading review accuracy", "arg": "accuracy", "imagefile": "icon_accuracy.png"}, {"title": "Leeches", "subtitle": "Items you keep getting wrong", "arg": "leeches", "imagefile": "icon_leeches.png"}, {"title": "Lessons", "subtitle": "Browse and search your current lesson queue", "arg": "lessons", "imagefile": "icon_lessons.png"}, {"title": "Reviews", "subtitle": "Browse and search your current review queue", "arg": "reviews", "imagefile": "icon_reviews.png"}]</string>
 				<key>keyword</key>
-				<string>wk</string>
+				<string>{var:WANIKANI_PROGRESS_KEYWORD}</string>
 				<key>matchmode</key>
 				<integer>0</integer>
 				<key>runningsubtext</key>
@@ -1161,6 +1161,48 @@
 	</dict>
 	<key>userconfigurationconfig</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>wk</string>
+				<key>placeholder</key>
+				<string>wk</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Keyword for browsing WaniKani progress.</string>
+			<key>label</key>
+			<string>Progress keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>WANIKANI_PROGRESS_KEYWORD</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>wks</string>
+				<key>placeholder</key>
+				<string>wks</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Keyword for searching WaniKani subjects.</string>
+			<key>label</key>
+			<string>Search keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>WANIKANI_SEARCH_KEYWORD</string>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>

@@ -1,62 +1,40 @@
-# alfred-workflow-wanikani
+# WaniKani for Alfred
 
-Alfred Workflow to check [WaniKani](https://www.wanikani.com) lesson/review status via the [WaniKani API v2](https://docs.api.wanikani.com/20170710).
+Check WaniKani progress and search WaniKani subjects from Alfred.
 
-## Commands
+## Usage
 
-### `wk` - browse your progress
+Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches via the `wk` keyword.
 
-Selecting any row opens the relevant WaniKani page in your browser.
-
-| Command | Shows |
-|---|---|
-| **Summary** | Current level, lessons & reviews available now, when the next review batch unlocks |
-| **Levels** | ETA to next level, then level history with time spent per level |
-| **Stats** | SRS stage breakdown (Apprentice / Guru / Master / Enlightened / Burned) |
-| **Accuracy** | Overall, meaning, and reading review accuracy |
-| **Leeches** | Worst-accuracy items, with ETA to burn |
-| **Lessons** | Current lesson queue, searchable |
-| **Reviews** | Current review queue, searchable |
-
-Lessons and Reviews rows show `𝐖level・type・parts of speech`, colour-coded by subject type (radical / kanji / vocabulary).
-
-### `wks <query>` - dictionary search
-
-Searches wanikani.com as you type; no Enter needed. Returns radicals, kanji, and vocabulary with readings and meanings. Selecting a row opens that subject's WaniKani page.
-
-Results are parsed from the public search page - the API has no full-text subject search endpoint.
+Search WaniKani radicals, kanji, and vocabulary as you type via the `wks` keyword. Select a result to open its WaniKani page.
 
 ## Install
 
 1. Download the latest `WaniKani.alfredworkflow` from [Releases](https://github.com/aleksgorbenko/alfred-workflow-wanikani/releases).
-2. Double-click it - Alfred will prompt to import.
-3. Requires [Alfred](https://www.alfredapp.com) with a Powerpack license.
-
-## Setup
-
-1. Open the workflow in Alfred, click the `[x]` (Configure Workflow) button.
-2. Paste your [WaniKani personal access token](https://www.wanikani.com/settings/personal_access_tokens) into the **Wanikani API Key** field (needs `all_data:read`).
+2. Double-click it and let Alfred import it.
+3. Requires [Alfred](https://www.alfredapp.com) with a Powerpack licence.
 
 ## Development
 
-- Python 3.14, stdlib only.
-- `src/wkapi/` - runtime scripts Alfred calls.
-- `tools/` - dev-only scripts (icon gen, bundle verification), not shipped.
+- Python 3.14, standard library only.
+- Runtime code is in `src/wkapi/`.
+- Maintainer tools are in `tools/`.
 
 ```sh
-make check    # lint + format check + tests
-make build    # package dist/WaniKani.alfredworkflow
-make verify   # audit the built bundle for local paths, tokens, junk files
+make check   # lint, format check, and tests
+make build   # package dist/WaniKani.alfredworkflow
+make verify  # audit the built bundle
 make release VERSION=v1.0.0
-make sync-plist WORKFLOW_DIR=/path/to/installed/workflow   # pull info.plist edits back
-make link-live WORKFLOW_DIR=/path/to/installed/workflow    # symlink src/ for live dev
+make sync-plist WORKFLOW_DIR=/path/to/installed/workflow
+make link-live WORKFLOW_DIR=/path/to/installed/workflow
 ```
 
 ## My Other Workflows
 
+- [BunPro for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bunpro)
+- [Nihongo for Alfred](https://github.com/aleksgorbenko/alfred-workflow-nihongo)
 - [Netlify for Alfred](https://github.com/aleksgorbenko/alfred-workflow-netlify)
 - [2Do for Alfred](https://github.com/aleksgorbenko/alfred-workflow-2do)
-- [BunPro for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bunpro)
 - [Discogs for Alfred](https://github.com/aleksgorbenko/alfred-workflow-discogs)
 - [Bandcamp for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bandcamp)
-- [config](https://github.com/aleksgorbenko/config) — index of all my workflows, plus macOS/iOS setup
+- [config](https://github.com/aleksgorbenko/config)
