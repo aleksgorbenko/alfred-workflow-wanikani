@@ -66,6 +66,10 @@ link-live:
 	ln -sfn "$(CURDIR)/src" "$(WORKFLOW_DIR)/src"
 	ln -sfn "$(CURDIR)/icons" "$(WORKFLOW_DIR)/icons"
 	ln -sfn "$(CURDIR)/icon.png" "$(WORKFLOW_DIR)/icon.png"
+	for icon in *.png; do \
+		[ "$$icon" = "icon.png" ] || ln -sfn "$(CURDIR)/$$icon" "$(WORKFLOW_DIR)/$$icon"; \
+	done
+	ln -sfn "$(CURDIR)/Makefile" "$(WORKFLOW_DIR)/Makefile"
 	mkdir -p "$(WORKFLOW_DIR)/List Filter Images"
 	for name in summary levels stats accuracy leeches lessons reviews; do \
 		ln -sfn "$(CURDIR)/icons/icon_$$name.png" "$(WORKFLOW_DIR)/List Filter Images/icon_$$name.png"; \
