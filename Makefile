@@ -27,6 +27,7 @@ build: check
 	mkdir -p $(BUILD)/src/wkapi $(BUILD)/icons "$(BUILD)/List Filter Images"
 	cp info.plist $(BUILD)/
 	cp icon.png $(BUILD)/
+	cp *.png $(BUILD)/
 	cp src/wkapi/*.py $(BUILD)/src/wkapi/
 	cp icons/*.png $(BUILD)/icons/
 	cp icons/icon_summary.png icons/icon_levels.png icons/icon_stats.png \
