@@ -4,9 +4,11 @@ Check WaniKani progress and search WaniKani subjects from Alfred.
 
 ## Usage
 
-Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches via the `wk` keyword.
+| Keyword | Function |
+| --- | --- |
+| `wk` | Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches. |
+| `wks` | Search WaniKani radicals, kanji, and vocabulary as you type. Select a result to open its WaniKani page. |
 
-Search WaniKani radicals, kanji, and vocabulary as you type via the `wks` keyword. Select a result to open its WaniKani page.
 
 ## Install
 
