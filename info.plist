@@ -774,7 +774,7 @@
 				<key>items</key>
 				<string>[{"title": "Summary", "subtitle": "Lessons and reviews available right now", "arg": "summary", "imagefile": "icon_summary.png"}, {"title": "Levels", "subtitle": "Level history and time spent per level", "arg": "levels", "imagefile": "icon_levels.png"}, {"title": "Stats", "subtitle": "SRS stage breakdown (Apprentice/Guru/Master/Enlightened/Burned)", "arg": "stats", "imagefile": "icon_stats.png"}, {"title": "Accuracy", "subtitle": "Overall, meaning, and reading review accuracy", "arg": "accuracy", "imagefile": "icon_accuracy.png"}, {"title": "Leeches", "subtitle": "Items you keep getting wrong", "arg": "leeches", "imagefile": "icon_leeches.png"}, {"title": "Lessons", "subtitle": "Browse and search your current lesson queue", "arg": "lessons", "imagefile": "icon_lessons.png"}, {"title": "Reviews", "subtitle": "Browse and search your current review queue", "arg": "reviews", "imagefile": "icon_reviews.png"}]</string>
 				<key>keyword</key>
-				<string>{var:WANIKANI_PROGRESS_KEYWORD}</string>
+				<string>{var:WANIKANI_MAIN_KEYWORD}</string>
 				<key>matchmode</key>
 				<integer>0</integer>
 				<key>runningsubtext</key>
@@ -993,7 +993,49 @@
 		</dict>
 	</array>
 	<key>readme</key>
-	<string></string>
+	<string># WaniKani for Alfred
+
+Check WaniKani progress and search WaniKani subjects from Alfred.
+
+## Usage
+
+| Keyword | Function |
+| --- | --- |
+| `wk` | Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches. |
+| `wks` | Search WaniKani radicals, kanji, and vocabulary as you type. Select a result to open its WaniKani page. |
+
+
+## Install
+
+1. Download the latest `WaniKani.alfredworkflow` from [Releases](https://github.com/aleksgorbenko/alfred-workflow-wanikani/releases).
+2. Double-click it and let Alfred import it.
+3. Requires [Alfred](https://www.alfredapp.com) with a Powerpack licence.
+
+## Development
+
+- Python 3.14, standard library only.
+- Runtime code is in `src/wkapi/`.
+- Maintainer tools are in `tools/`.
+
+```sh
+make check   # lint, format check, and tests
+make build   # package dist/WaniKani.alfredworkflow
+make verify  # audit the built bundle
+make release VERSION=v1.0.0
+make sync-plist WORKFLOW_DIR=/path/to/installed/workflow
+make link-live WORKFLOW_DIR=/path/to/installed/workflow
+```
+
+## My Other Workflows
+
+- [BunPro for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bunpro)
+- [Nihongo for Alfred](https://github.com/aleksgorbenko/alfred-workflow-nihongo)
+- [Netlify for Alfred](https://github.com/aleksgorbenko/alfred-workflow-netlify)
+- [2Do for Alfred](https://github.com/aleksgorbenko/alfred-workflow-2do)
+- [Discogs for Alfred](https://github.com/aleksgorbenko/alfred-workflow-discogs)
+- [Bandcamp for Alfred](https://github.com/aleksgorbenko/alfred-workflow-bandcamp)
+- [config](https://github.com/aleksgorbenko/config)
+</string>
 	<key>uidata</key>
 	<dict>
 		<key>111771B2-92E6-487C-9B6A-A8DC04932DB1</key>
@@ -1180,7 +1222,7 @@
 			<key>type</key>
 			<string>textfield</string>
 			<key>variable</key>
-			<string>WANIKANI_PROGRESS_KEYWORD</string>
+			<string>WANIKANI_MAIN_KEYWORD</string>
 		</dict>
 		<dict>
 			<key>config</key>
