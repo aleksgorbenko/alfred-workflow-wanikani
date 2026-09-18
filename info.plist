@@ -997,11 +997,17 @@
 
 Browse WaniKani progress via the `wk` keyword.
 
+![WaniKani progress menu](images/about/main.png)
+
 * &lt;kbd&gt;↩&lt;/kbd&gt; Open the selected lessons, reviews, level, or dashboard item.
 
 Search WaniKani subjects via the `wks` keyword. Type to filter radicals, kanji, and vocabulary.
 
+![WaniKani subject search](images/about/search.png)
+
 * &lt;kbd&gt;↩&lt;/kbd&gt; Open the selected subject on WaniKani.
+
+![WaniKani progress summary](images/about/summary.png)
 
 Set the keywords and API token in the [Workflow's Configuration](https://www.alfredapp.com/help/workflows/user-configuration/).</string>
 	<key>uidata</key>

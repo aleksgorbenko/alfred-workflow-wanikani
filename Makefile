@@ -24,11 +24,12 @@ clean:
 
 build: check
 	rm -rf $(DIST)
-	mkdir -p $(BUILD)/src/wkapi $(BUILD)/icons "$(BUILD)/List Filter Images"
+	mkdir -p $(BUILD)/src/wkapi $(BUILD)/icons "$(BUILD)/List Filter Images" "$(BUILD)/images/about"
 	cp info.plist $(BUILD)/
 	cp icon.png $(BUILD)/
 	cp *.png $(BUILD)/
 	cp src/wkapi/*.py $(BUILD)/src/wkapi/
+	cp images/about/*.png "$(BUILD)/images/about/"
 	cp icons/*.png $(BUILD)/icons/
 	cp icons/icon_summary.png icons/icon_levels.png icons/icon_stats.png \
 		icons/icon_accuracy.png icons/icon_leeches.png icons/icon_lessons.png \

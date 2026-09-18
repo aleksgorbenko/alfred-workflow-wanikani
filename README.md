@@ -9,6 +9,12 @@ Check WaniKani progress and search WaniKani subjects from Alfred.
 | `wk` | Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches. |
 | `wks` | Search WaniKani radicals, kanji, and vocabulary as you type. Select a result to open its WaniKani page. |
 
+![WaniKani progress menu](images/about/main.png)
+
+![WaniKani subject search](images/about/search.png)
+
+![WaniKani progress summary](images/about/summary.png)
+
 
 ## Install
 
