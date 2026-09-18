@@ -66,6 +66,7 @@ link-live:
 	rm -f "$(WORKFLOW_DIR)/scripts"
 	ln -sfn "$(CURDIR)/src" "$(WORKFLOW_DIR)/src"
 	ln -sfn "$(CURDIR)/icons" "$(WORKFLOW_DIR)/icons"
+	ln -sfn "$(CURDIR)/images" "$(WORKFLOW_DIR)/images"
 	ln -sfn "$(CURDIR)/icon.png" "$(WORKFLOW_DIR)/icon.png"
 	for icon in *.png; do \
 		[ "$$icon" = "icon.png" ] || ln -sfn "$(CURDIR)/$$icon" "$(WORKFLOW_DIR)/$$icon"; \

@@ -13,6 +13,8 @@ Check WaniKani progress and search WaniKani subjects from Alfred.
 
 ![WaniKani subject search](images/about/search.png)
 
+Open the Summary view to see your current WaniKani progress.
+
 ![WaniKani progress summary](images/about/summary.png)
 
 

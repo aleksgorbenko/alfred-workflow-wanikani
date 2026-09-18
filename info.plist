@@ -1007,6 +1007,8 @@ Search WaniKani subjects via the `wks` keyword. Type to filter radicals, kanji, 
 
 * &lt;kbd&gt;↩&lt;/kbd&gt; Open the selected subject on WaniKani.
 
+Open the Summary view to see your current WaniKani progress.
+
 ![WaniKani progress summary](images/about/summary.png)
 
 Set the keywords and API token in the [Workflow's Configuration](https://www.alfredapp.com/help/workflows/user-configuration/).</string>
