@@ -1186,7 +1186,7 @@ Set the keywords and API token in the [Workflow's Configuration](https://www.alf
 			<key>description</key>
 			<string>Keyword for browsing WaniKani progress.</string>
 			<key>label</key>
-			<string>Progress keyword</string>
+			<string>WaniKani keyword</string>
 			<key>type</key>
 			<string>textfield</string>
 			<key>variable</key>
