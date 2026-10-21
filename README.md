@@ -37,6 +37,10 @@ Open the Summary view to see your current WaniKani progress.
 
 ![WaniKani progress summary](images/about/summary.png)
 
+### Maintenance
+
+- `:wk` - cache size (Enter reveals the folder) and Empty Cache.
+
 ## Install
 
 1. Download the latest `WaniKani.alfredworkflow` from [Releases](https://github.com/aleksgorbenko/alfred-workflow-wanikani/releases).

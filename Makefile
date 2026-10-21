@@ -5,7 +5,7 @@ RUN := uv run --no-sync
 JSON_FILES := $(shell git ls-files '*.json')
 export HOMEBREW_NO_AUTO_UPDATE := 1
 
-.PHONY: setup icons test lint lint-python lint-data lint-md lint-actions format format-check audit check ci clean build verify release sync-plist link-live
+.PHONY: setup icons test lint lint-shell lint-python lint-data lint-md lint-actions format format-check audit check ci clean build verify release sync-plist link-live
 
 setup:
 	brew bundle --quiet
@@ -14,11 +14,15 @@ setup:
 icons:
 	$(RUN) --with pillow python tools/gen_icons.py
 	$(RUN) --with pillow python tools/gen_command_icons.py
+	for icon in icons/icon_*.png; do icon-polish.sh "$$icon" "$$icon" --size 512; done
 
 test:
 	$(RUN) pytest
 
-lint: lint-python lint-data lint-md lint-actions
+lint: lint-shell lint-python lint-data lint-md lint-actions
+
+lint-shell:
+	shellcheck src/maintenance.sh
 
 lint-python:
 	$(RUN) ruff check .
@@ -63,6 +67,8 @@ build: check
 	cp icons/icon_summary.png icons/icon_levels.png icons/icon_stats.png \
 		icons/icon_accuracy.png icons/icon_leeches.png icons/icon_lessons.png \
 		icons/icon_reviews.png "$(BUILD)/List Filter Images/"
+	mkdir -p $(BUILD)/src
+	cp src/maintenance.sh $(BUILD)/src/
 	cd $(BUILD) && zip -r -q ../$(NAME) .
 	rm -rf $(BUILD)
 	@echo "built $(DIST)/$(NAME)"
