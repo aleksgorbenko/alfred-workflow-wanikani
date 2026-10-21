@@ -1,4 +1,5 @@
 import datetime as dt
+from typing import Any
 
 from summary import build_items
 
@@ -6,7 +7,7 @@ NOW = dt.datetime(2026, 8, 3, 12, 0, tzinfo=dt.UTC)
 LEVEL = 12
 
 
-def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict:
+def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict[str, Any]:
     at = NOW + dt.timedelta(hours=hours_from_now)
     return {
         "available_at": at.isoformat().replace("+00:00", "Z"),
@@ -14,7 +15,7 @@ def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict:
     }
 
 
-def test_shows_level_lessons_and_reviews():
+def test_shows_level_lessons_and_reviews() -> None:
     summary = {
         "lessons": [_bucket(0, [1, 2, 3])],
         "reviews": [_bucket(-1, [4, 5]), _bucket(2, [6, 7, 8])],
@@ -28,7 +29,7 @@ def test_shows_level_lessons_and_reviews():
     assert items[2]["title"] == "🔁 Reviews available: 2"
 
 
-def test_shows_next_reviews_at_when_none_available_now():
+def test_shows_next_reviews_at_when_none_available_now() -> None:
     summary = {
         "lessons": [],
         "reviews": [_bucket(2, [1])],
@@ -44,7 +45,7 @@ def test_shows_next_reviews_at_when_none_available_now():
     assert items[3]["title"].startswith("⏰ Next reviews at:")
 
 
-def test_omits_next_reviews_at_when_reviews_available_now():
+def test_omits_next_reviews_at_when_reviews_available_now() -> None:
     summary = {
         "lessons": [],
         "reviews": [_bucket(0, [1])],

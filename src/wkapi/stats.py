@@ -2,6 +2,7 @@
 
 import os
 import sys
+from typing import Any
 
 from alfred_items import emit, error_item, item
 from wanikani_api import WanikaniError, get_assignments
@@ -10,7 +11,7 @@ DASHBOARD_URL = "https://www.wanikani.com/dashboard"
 ICON = "icons/icon_stats.png"
 
 STAGE_BUCKETS = [
-    ("Apprentice", "🌸", range(0, 5)),
+    ("Apprentice", "🌸", range(5)),
     ("Guru", "🟣", range(5, 7)),
     ("Master", "🔵", range(7, 8)),
     ("Enlightened", "🔷", range(8, 9)),
@@ -18,7 +19,7 @@ STAGE_BUCKETS = [
 ]
 
 
-def build_items(assignments: list[dict]) -> list[dict]:
+def build_items(assignments: list[dict[str, Any]]) -> list[dict[str, Any]]:
     counts = dict.fromkeys((name for name, _, _ in STAGE_BUCKETS), 0)
     for assignment in assignments:
         stage = assignment.get("srs_stage")

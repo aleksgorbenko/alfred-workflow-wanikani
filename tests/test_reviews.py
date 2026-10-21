@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from reviews import main
 
@@ -7,8 +7,8 @@ from reviews import main
 @patch("reviews.get_summary")
 @patch("reviews.emit")
 def test_uses_reviews_bucket_from_summary(
-    mock_emit, mock_get_summary, mock_get_subjects
-):
+    mock_emit: MagicMock, mock_get_summary: MagicMock, mock_get_subjects: MagicMock
+) -> None:
     mock_get_summary.return_value = {
         "reviews": [
             {
@@ -30,7 +30,7 @@ def test_uses_reviews_bucket_from_summary(
 
 
 @patch("reviews.emit")
-def test_missing_token_emits_error(mock_emit):
+def test_missing_token_emits_error(mock_emit: MagicMock) -> None:
     with patch.dict("os.environ", {"WANIKANI_API_TOKEN": ""}):
         main()
 

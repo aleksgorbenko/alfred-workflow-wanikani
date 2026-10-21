@@ -1,4 +1,5 @@
 import datetime as dt
+from typing import Any
 
 from levels import build_items, next_level_item
 
@@ -22,13 +23,16 @@ SYSTEM = {
 }
 
 
-def _kanji(subject_id, system_id=1):
+def _kanji(subject_id: int, system_id: int = 1) -> dict[str, Any]:
     return {"id": subject_id, "spaced_repetition_system_id": system_id}
 
 
 def _assignment(
-    subject_id, srs_stage, available_at="2026-08-03T00:00:00.000000Z", passed_at=None
-):
+    subject_id: int,
+    srs_stage: int,
+    available_at: str = "2026-08-03T00:00:00.000000Z",
+    passed_at: str | None = None,
+) -> dict[str, Any]:
     return {
         "subject_id": subject_id,
         "srs_stage": srs_stage,
@@ -37,7 +41,7 @@ def _assignment(
     }
 
 
-def test_shows_passed_level_with_duration():
+def test_shows_passed_level_with_duration() -> None:
     progressions = [
         {
             "level": 1,
@@ -52,7 +56,7 @@ def test_shows_passed_level_with_duration():
     assert items[0]["subtitle"] == "Started 2026-07-01 → Passed 2026-07-08"
 
 
-def test_shows_in_progress_level_using_now():
+def test_shows_in_progress_level_using_now() -> None:
     progressions = [
         {
             "level": 2,
@@ -67,7 +71,7 @@ def test_shows_in_progress_level_using_now():
     assert items[0]["subtitle"] == "Started 2026-08-01"
 
 
-def test_skips_unlocked_but_not_started_levels():
+def test_skips_unlocked_but_not_started_levels() -> None:
     progressions = [
         {"level": 3, "started_at": None, "passed_at": None},
     ]
@@ -77,7 +81,7 @@ def test_skips_unlocked_but_not_started_levels():
     assert items == []
 
 
-def test_sorted_highest_level_first():
+def test_sorted_highest_level_first() -> None:
     progressions = [
         {"level": 1, "started_at": "2026-07-01T00:00:00.000000Z", "passed_at": None},
         {"level": 2, "started_at": "2026-08-01T00:00:00.000000Z", "passed_at": None},
@@ -89,7 +93,7 @@ def test_sorted_highest_level_first():
     assert items[1]["title"].startswith("Level 1")
 
 
-def test_next_level_ready_when_enough_kanji_already_passed():
+def test_next_level_ready_when_enough_kanji_already_passed() -> None:
     kanji_subjects = [_kanji(i) for i in range(10)]
     kanji_assignments = [
         _assignment(i, 6, passed_at="2026-08-01T00:00:00.000000Z") for i in range(9)
@@ -100,7 +104,7 @@ def test_next_level_ready_when_enough_kanji_already_passed():
     assert result["title"] == "🎉 Ready to level up!"
 
 
-def test_next_level_asks_for_lessons_when_not_enough_in_progress():
+def test_next_level_asks_for_lessons_when_not_enough_in_progress() -> None:
     kanji_subjects = [_kanji(i) for i in range(10)]
     kanji_assignments = [
         _assignment(0, 2),
@@ -114,7 +118,7 @@ def test_next_level_asks_for_lessons_when_not_enough_in_progress():
     assert result["subtitle"] == "total kanji: 10・guru: 0・started: 1・locked: 7"
 
 
-def test_next_level_eta_uses_slowest_of_the_needed_kanji():
+def test_next_level_eta_uses_slowest_of_the_needed_kanji() -> None:
     kanji_subjects = [_kanji(1), _kanji(2)]
     kanji_assignments = [_assignment(1, 4), _assignment(2, 1)]
 

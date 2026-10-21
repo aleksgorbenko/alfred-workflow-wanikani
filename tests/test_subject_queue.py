@@ -1,11 +1,12 @@
 import datetime as dt
+from typing import Any
 
 from subject_queue import available_subject_ids, build_items
 
 EMPTY_MESSAGE = "🎉 No lessons available"
 
 
-def test_title_is_character_and_meaning_subtitle_has_level_type_and_part_of_speech():
+def test_title_is_character_meaning_and_subtitle_has_level_type_and_pos() -> None:
     subjects_by_id = {
         2467: {
             "characters": "一",
@@ -22,7 +23,7 @@ def test_title_is_character_and_meaning_subtitle_has_level_type_and_part_of_spee
     assert items[0]["subtitle"] == "W5・Vocabulary・numeral"
 
 
-def test_kanji_has_no_part_of_speech_segment():
+def test_kanji_has_no_part_of_speech_segment() -> None:
     subjects_by_id = {
         440: {
             "characters": "大",
@@ -38,7 +39,7 @@ def test_kanji_has_no_part_of_speech_segment():
     assert items[0]["subtitle"] == "W1・Kanji"
 
 
-def test_kana_vocabulary_type_is_two_words():
+def test_kana_vocabulary_type_is_two_words() -> None:
     subjects_by_id = {
         1: {
             "characters": "とても",
@@ -53,7 +54,7 @@ def test_kana_vocabulary_type_is_two_words():
     assert items[0]["subtitle"] == "W12・Kana Vocabulary"
 
 
-def test_hyphenates_na_i_no_adjectives():
+def test_hyphenates_na_i_no_adjectives() -> None:
     subjects_by_id = {
         1: {
             "characters": "静か",
@@ -70,7 +71,7 @@ def test_hyphenates_na_i_no_adjectives():
     assert items[0]["subtitle"] == expected
 
 
-def test_leaves_other_parts_of_speech_untouched():
+def test_leaves_other_parts_of_speech_untouched() -> None:
     subjects_by_id = {
         1: {
             "characters": "静",
@@ -86,7 +87,7 @@ def test_leaves_other_parts_of_speech_untouched():
     assert items[0]["subtitle"] == "W11・Vocabulary・noun"
 
 
-def test_relabels_verbal_noun_to_avoid_clash_with_suru_verb():
+def test_relabels_verbal_noun_to_avoid_clash_with_suru_verb() -> None:
     subjects_by_id = {
         1: {
             "characters": "中止",
@@ -110,7 +111,7 @@ def test_relabels_verbal_noun_to_avoid_clash_with_suru_verb():
     assert items[1]["subtitle"] == "W20・Vocabulary・する verb"
 
 
-def test_falls_back_to_slug_then_id_when_no_meaning():
+def test_falls_back_to_slug_then_id_when_no_meaning() -> None:
     subjects_by_id = {1: {"slug": "leaf", "subject_type": "radical", "level": 1}}
 
     items = build_items([1, 2], subjects_by_id, EMPTY_MESSAGE)
@@ -119,7 +120,7 @@ def test_falls_back_to_slug_then_id_when_no_meaning():
     assert items[1]["title"] == "#2"
 
 
-def test_empty_subject_ids_shows_provided_message():
+def test_empty_subject_ids_shows_provided_message() -> None:
     items = build_items([], {}, "🎉 No reviews available")
 
     assert items == [
@@ -130,7 +131,7 @@ def test_empty_subject_ids_shows_provided_message():
 NOW = dt.datetime(2026, 8, 3, 12, 0, tzinfo=dt.UTC)
 
 
-def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict:
+def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict[str, Any]:
     at = NOW + dt.timedelta(hours=hours_from_now)
     return {
         "available_at": at.isoformat().replace("+00:00", "Z"),
@@ -138,7 +139,7 @@ def _bucket(hours_from_now: int, subject_ids: list[int]) -> dict:
     }
 
 
-def test_available_subject_ids_only_includes_past_buckets():
+def test_available_subject_ids_only_includes_past_buckets() -> None:
     buckets = [_bucket(-1, [1, 2]), _bucket(2, [3])]
 
     ids = available_subject_ids(buckets, NOW)

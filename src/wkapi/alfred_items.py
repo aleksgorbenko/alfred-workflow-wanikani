@@ -2,6 +2,7 @@
 
 import json
 import sys
+from typing import Any
 
 _BOLD_UPPER_A = 0x1D400
 _BOLD_DIGIT_0 = 0x1D7CE
@@ -19,7 +20,7 @@ def bold(text: str) -> str:
     Alfred's subtitle field has no markup support, so this is the only way
     to make part of a subtitle visually stand out.
     """
-    chars = []
+    chars: list[str] = []
     for ch in text:
         if ch.isascii() and "A" <= ch <= "Z":
             chars.append(chr(_BOLD_UPPER_A + (ord(ch) - ord("A"))))
@@ -32,12 +33,13 @@ def bold(text: str) -> str:
 
 def item(
     title: str,
+    *,
     subtitle: str = "",
     arg: str | None = None,
     valid: bool = True,
     icon: str | None = None,
-) -> dict:
-    result: dict = {"title": title, "subtitle": subtitle, "valid": valid}
+) -> dict[str, Any]:
+    result: dict[str, Any] = {"title": title, "subtitle": subtitle, "valid": valid}
     if arg is not None:
         result["arg"] = arg
     if icon is not None:
@@ -45,9 +47,9 @@ def item(
     return result
 
 
-def error_item(message: str) -> dict:
+def error_item(message: str) -> dict[str, Any]:
     return item(title=message, valid=False)
 
 
-def emit(items: list[dict]) -> None:
+def emit(items: list[dict[str, Any]]) -> None:
     json.dump({"items": items}, sys.stdout)

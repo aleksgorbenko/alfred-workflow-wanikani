@@ -1,11 +1,13 @@
+from typing import Any
+
 from stats import build_items
 
 
-def _assignment(srs_stage: int) -> dict:
+def _assignment(srs_stage: int) -> dict[str, Any]:
     return {"srs_stage": srs_stage}
 
 
-def test_buckets_stages_into_named_groups():
+def test_buckets_stages_into_named_groups() -> None:
     assignments = [
         _assignment(1),
         _assignment(4),
@@ -26,13 +28,13 @@ def test_buckets_stages_into_named_groups():
     assert items[4]["title"] == "⚪ Burned: 2"
 
 
-def test_ignores_assignments_without_srs_stage():
+def test_ignores_assignments_without_srs_stage() -> None:
     items = build_items([{"subject_id": 1}])
 
     assert items[0]["title"] == "🌸 Apprentice: 0"
 
 
-def test_empty_assignments_gives_zero_counts():
+def test_empty_assignments_gives_zero_counts() -> None:
     items = build_items([])
 
     assert [i["title"] for i in items] == [

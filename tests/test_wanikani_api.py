@@ -1,5 +1,7 @@
 import urllib.error
-from unittest.mock import patch
+from email.message import Message
+from typing import Any
+from unittest.mock import MagicMock, patch
 
 import pytest
 from wanikani_api import (
@@ -15,8 +17,11 @@ from wanikani_api import (
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_summary_returns_data_object(mock_urlopen):
-    payload = {"object": "report", "data": {"lessons": [], "reviews": []}}
+def test_get_summary_returns_data_object(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
+        "object": "report",
+        "data": {"lessons": [], "reviews": []},
+    }
     with patch("wanikani_api.json.load", return_value=payload):
         result = get_summary("token")
     assert result == {"lessons": [], "reviews": []}
@@ -24,8 +29,8 @@ def test_get_summary_returns_data_object(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_summary_sends_auth_header(mock_urlopen):
-    payload = {"data": {}}
+def test_get_summary_sends_auth_header(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {"data": {}}
     with patch("wanikani_api.json.load", return_value=payload):
         get_summary("secret-token")
 
@@ -35,33 +40,40 @@ def test_get_summary_sends_auth_header(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_summary_raises_auth_error_on_401(mock_urlopen):
+def test_get_summary_raises_auth_error_on_401(mock_urlopen: MagicMock) -> None:
     mock_urlopen.side_effect = urllib.error.HTTPError(
-        url="", code=401, msg="Unauthorized", hdrs=None, fp=None
+        url="", code=401, msg="Unauthorized", hdrs=Message(), fp=None
     )
     with pytest.raises(WanikaniAuthError):
         get_summary("bad-token")
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_summary_raises_wanikani_error_on_other_http_error(mock_urlopen):
+def test_get_summary_raises_wanikani_error_on_other_http_error(
+    mock_urlopen: MagicMock,
+) -> None:
     mock_urlopen.side_effect = urllib.error.HTTPError(
-        url="", code=500, msg="Server Error", hdrs=None, fp=None
+        url="", code=500, msg="Server Error", hdrs=Message(), fp=None
     )
     with pytest.raises(WanikaniError):
         get_summary("token")
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_summary_raises_wanikani_error_on_url_error(mock_urlopen):
+def test_get_summary_raises_wanikani_error_on_url_error(
+    mock_urlopen: MagicMock,
+) -> None:
     mock_urlopen.side_effect = urllib.error.URLError("no network")
     with pytest.raises(WanikaniError):
         get_summary("token")
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_user_returns_data_object(mock_urlopen):
-    payload = {"object": "user", "data": {"username": "aleks", "level": 12}}
+def test_get_user_returns_data_object(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
+        "object": "user",
+        "data": {"username": "aleks", "level": 12},
+    }
     with patch("wanikani_api.json.load", return_value=payload):
         result = get_user("token")
     assert result == {"username": "aleks", "level": 12}
@@ -69,8 +81,8 @@ def test_get_user_returns_data_object(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_level_progressions_unwraps_collection(mock_urlopen):
-    payload = {
+def test_get_level_progressions_unwraps_collection(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
         "object": "collection",
         "pages": {"next_url": None},
         "data": [
@@ -85,7 +97,7 @@ def test_get_level_progressions_unwraps_collection(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_level_progressions_follows_pagination(mock_urlopen):
+def test_get_level_progressions_follows_pagination(mock_urlopen: MagicMock) -> None:
     page_one = {
         "pages": {"next_url": "https://api.wanikani.com/v2/level_progressions?page=2"},
         "data": [{"object": "level_progression", "data": {"level": 1}}],
@@ -106,8 +118,8 @@ def test_get_level_progressions_follows_pagination(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_assignments_sends_query_params(mock_urlopen):
-    payload = {"pages": {"next_url": None}, "data": []}
+def test_get_assignments_sends_query_params(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {"pages": {"next_url": None}, "data": []}
     with patch("wanikani_api.json.load", return_value=payload):
         get_assignments("token", started="true")
 
@@ -116,8 +128,8 @@ def test_get_assignments_sends_query_params(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_assignments_unwraps_collection(mock_urlopen):
-    payload = {
+def test_get_assignments_unwraps_collection(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
         "pages": {"next_url": None},
         "data": [{"object": "assignment", "data": {"srs_stage": 3}}],
     }
@@ -128,8 +140,8 @@ def test_get_assignments_unwraps_collection(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_review_statistics_unwraps_collection(mock_urlopen):
-    payload = {
+def test_get_review_statistics_unwraps_collection(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
         "pages": {"next_url": None},
         "data": [{"object": "review_statistic", "data": {"percentage_correct": 60}}],
     }
@@ -144,8 +156,8 @@ def test_get_review_statistics_unwraps_collection(mock_urlopen):
 
 
 @patch("wanikani_api.urllib.request.urlopen")
-def test_get_subjects_includes_id_and_subject_type(mock_urlopen):
-    payload = {
+def test_get_subjects_includes_id_and_subject_type(mock_urlopen: MagicMock) -> None:
+    payload: dict[str, Any] = {
         "pages": {"next_url": None},
         "data": [
             {"id": 440, "object": "kanji", "data": {"characters": "大", "slug": "big"}}

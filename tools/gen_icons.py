@@ -55,7 +55,7 @@ def render(char: str, bg: str, out: Path) -> None:
     y = (canvas - (box[3] + box[1])) / 2
     draw.text((x, y), char, font=font, fill=FG)
 
-    img.resize((SIZE, SIZE), Image.LANCZOS).save(out)
+    img.resize((SIZE, SIZE), Image.Resampling.LANCZOS).save(out)  # pyright: ignore[reportUnknownMemberType]
 
 
 def main() -> int:
@@ -63,12 +63,12 @@ def main() -> int:
     wanted = sys.argv[1:] or list(ICONS)
     for key in wanted:
         if key not in ICONS:
-            print(f"unknown key: {key}", file=sys.stderr)
+            sys.stderr.write(f"unknown key: {key}\n")
             return 1
         glyph, bg = ICONS[key]
         path = out_dir / f"icon_{key}.png"
         render(glyph, bg, path)
-        print(path)
+        sys.stdout.write(f"{path}\n")
     return 0
 
 

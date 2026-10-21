@@ -36,11 +36,11 @@ def render(emoji: str, out: Path) -> None:
     ImageDraw.Draw(glyph).text((0, 0), emoji, font=font, embedded_color=True)
 
     target = round(GLYPH * canvas)
-    glyph = glyph.resize((target, target), Image.LANCZOS)
+    glyph = glyph.resize((target, target), Image.Resampling.LANCZOS)  # pyright: ignore[reportUnknownMemberType]
     offset = ((canvas - target) // 2, (canvas - target) // 2)
     img.alpha_composite(glyph, offset)
 
-    img.resize((SIZE, SIZE), Image.LANCZOS).save(out)
+    img.resize((SIZE, SIZE), Image.Resampling.LANCZOS).save(out)  # pyright: ignore[reportUnknownMemberType]
 
 
 def main() -> int:
@@ -48,11 +48,11 @@ def main() -> int:
     wanted = sys.argv[1:] or list(ICONS)
     for key in wanted:
         if key not in ICONS:
-            print(f"unknown key: {key}", file=sys.stderr)
+            sys.stderr.write(f"unknown key: {key}\n")
             return 1
         path = out_dir / f"icon_{key}.png"
         render(ICONS[key], path)
-        print(path)
+        sys.stdout.write(f"{path}\n")
     return 0
 
 

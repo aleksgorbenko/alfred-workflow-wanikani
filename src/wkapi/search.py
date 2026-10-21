@@ -2,6 +2,7 @@
 
 import sys
 import urllib.parse
+from typing import Any
 
 from alfred_items import TYPE_ICONS, emit, error_item, item
 from wanikani_api import WanikaniError
@@ -20,7 +21,7 @@ def _subtitle(entry: dict[str, str]) -> str:
     return "・".join(segment for segment in segments if segment)
 
 
-def build_items(entries: list[dict[str, str]]) -> list[dict]:
+def build_items(entries: list[dict[str, str]]) -> list[dict[str, Any]]:
     if not entries:
         return [item(title="No results on WaniKani", valid=False)]
     return [

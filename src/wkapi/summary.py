@@ -3,6 +3,7 @@
 import datetime as dt
 import os
 import sys
+from typing import Any
 
 from alfred_items import emit, error_item, item
 from wanikani_api import WanikaniError, get_summary, get_user
@@ -14,10 +15,10 @@ ICON = "icons/icon_summary.png"
 
 
 def _parse(timestamp: str) -> dt.datetime:
-    return dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    return dt.datetime.fromisoformat(timestamp)
 
 
-def _available_count(buckets: list[dict], now: dt.datetime) -> int:
+def _available_count(buckets: list[dict[str, Any]], now: dt.datetime) -> int:
     return sum(
         len(bucket["subject_ids"])
         for bucket in buckets
@@ -25,7 +26,9 @@ def _available_count(buckets: list[dict], now: dt.datetime) -> int:
     )
 
 
-def build_items(summary: dict, level: int, now: dt.datetime) -> list[dict]:
+def build_items(
+    summary: dict[str, Any], level: int, now: dt.datetime
+) -> list[dict[str, Any]]:
     lessons_available = _available_count(summary["lessons"], now)
     reviews_available = _available_count(summary["reviews"], now)
 

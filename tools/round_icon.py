@@ -13,7 +13,7 @@ def round_corners(input_path: Path, output_path: Path) -> None:
     size = img.size[0]
     canvas = size * SS
 
-    img_ss = img.resize((canvas, canvas), Image.LANCZOS)
+    img_ss = img.resize((canvas, canvas), Image.Resampling.LANCZOS)  # pyright: ignore[reportUnknownMemberType]
     mask = Image.new("L", (canvas, canvas), 0)
     ImageDraw.Draw(mask).rounded_rectangle(
         (0, 0, canvas - 1, canvas - 1), radius=RADIUS * canvas, fill=255
@@ -21,7 +21,7 @@ def round_corners(input_path: Path, output_path: Path) -> None:
 
     alpha = ImageChops.multiply(img_ss.getchannel("A"), mask)
     img_ss.putalpha(alpha)
-    img_ss.resize((size, size), Image.LANCZOS).save(output_path)
+    img_ss.resize((size, size), Image.Resampling.LANCZOS).save(output_path)  # pyright: ignore[reportUnknownMemberType]
 
 
 _EXPECTED_ARGC = 3
@@ -29,10 +29,10 @@ _EXPECTED_ARGC = 3
 
 def main() -> int:
     if len(sys.argv) != _EXPECTED_ARGC:
-        print("usage: round_icon.py <input.png> <output.png>", file=sys.stderr)
+        sys.stderr.write("usage: round_icon.py <input.png> <output.png>\n")
         return 1
     round_corners(Path(sys.argv[1]), Path(sys.argv[2]))
-    print(sys.argv[2])
+    sys.stdout.write(f"{sys.argv[2]}\n")
     return 0
 
 

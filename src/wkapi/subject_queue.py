@@ -1,6 +1,7 @@
 """Shared Alfred item building for the WaniKani lesson/review subject queues."""
 
 import datetime as dt
+from typing import Any
 
 from alfred_items import TYPE_ICONS, item
 
@@ -9,18 +10,18 @@ SUBJECTS_TTL = 3 * 60 * 60
 
 
 def parse(timestamp: str) -> dt.datetime:
-    return dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    return dt.datetime.fromisoformat(timestamp)
 
 
-def available_subject_ids(buckets: list[dict], now: dt.datetime) -> list[int]:
-    ids = []
+def available_subject_ids(buckets: list[dict[str, Any]], now: dt.datetime) -> list[int]:
+    ids: list[int] = []
     for bucket in buckets:
         if parse(bucket["available_at"]) <= now:
             ids.extend(bucket["subject_ids"])
     return ids
 
 
-def _primary_meaning(subject: dict) -> str:
+def _primary_meaning(subject: dict[str, Any]) -> str:
     for meaning in subject.get("meanings", []):
         if meaning.get("primary"):
             return meaning["meaning"]
@@ -39,12 +40,14 @@ def _format_part_of_speech(part_of_speech: str) -> str:
 
 
 def build_items(
-    subject_ids: list[int], subjects_by_id: dict[int, dict], empty_message: str
-) -> list[dict]:
+    subject_ids: list[int],
+    subjects_by_id: dict[int, dict[str, Any]],
+    empty_message: str,
+) -> list[dict[str, Any]]:
     if not subject_ids:
         return [item(title=empty_message, valid=False)]
 
-    items = []
+    items: list[dict[str, Any]] = []
     for subject_id in subject_ids:
         subject = subjects_by_id.get(subject_id, {})
         name = subject.get("characters") or subject.get("slug") or f"#{subject_id}"

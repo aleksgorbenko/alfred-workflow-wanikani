@@ -1,8 +1,8 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from wanikani_api import WanikaniError
-from wanikani_search import _SearchResultParser, search
+from wanikani_search import SearchResultParser, search
 
 _RADICAL_CLASSES = (
     "subject-character subject-character--radical "
@@ -42,8 +42,8 @@ SAMPLE_HTML = f"""
 """
 
 
-def test_parses_radical_and_kanji_entries():
-    parser = _SearchResultParser()
+def test_parses_radical_and_kanji_entries() -> None:
+    parser = SearchResultParser()
     parser.feed(SAMPLE_HTML)
 
     expected_count = 2
@@ -67,7 +67,7 @@ def test_parses_radical_and_kanji_entries():
 
 
 @patch("wanikani_search._fetch_html")
-def test_search_returns_parsed_entries(mock_fetch_html):
+def test_search_returns_parsed_entries(mock_fetch_html: MagicMock) -> None:
     mock_fetch_html.return_value = SAMPLE_HTML
 
     entries = search("substitute")
@@ -78,7 +78,7 @@ def test_search_returns_parsed_entries(mock_fetch_html):
 
 
 @patch("wanikani_search._fetch_html")
-def test_search_propagates_wanikani_error(mock_fetch_html):
+def test_search_propagates_wanikani_error(mock_fetch_html: MagicMock) -> None:
     mock_fetch_html.side_effect = WanikaniError("boom")
 
     with pytest.raises(WanikaniError, match="boom"):

@@ -2,6 +2,7 @@
 
 import os
 import sys
+from typing import Any
 
 from alfred_items import emit, error_item, item
 from wanikani_api import WanikaniError, get_review_statistics
@@ -14,7 +15,7 @@ def _percentage(correct: int, total: int) -> int:
     return round(correct / total * 100) if total else 0
 
 
-def build_items(statistics: list[dict]) -> list[dict]:
+def build_items(statistics: list[dict[str, Any]]) -> list[dict[str, Any]]:
     meaning_correct = sum(s["meaning_correct"] for s in statistics)
     meaning_incorrect = sum(s["meaning_incorrect"] for s in statistics)
     reading_correct = sum(s["reading_correct"] for s in statistics)

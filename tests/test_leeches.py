@@ -1,4 +1,5 @@
 import datetime as dt
+from typing import Any
 
 from leeches import build_items, select_leeches
 
@@ -21,7 +22,11 @@ DEFAULT_SYSTEM = {
 }
 
 
-def _stat(subject_id, percentage_correct, counts=(3, 3, 3, 3)):
+def _stat(
+    subject_id: int,
+    percentage_correct: int,
+    counts: tuple[int, int, int, int] = (3, 3, 3, 3),
+) -> dict[str, Any]:
     meaning_correct, meaning_incorrect, reading_correct, reading_incorrect = counts
     return {
         "subject_id": subject_id,
@@ -33,7 +38,7 @@ def _stat(subject_id, percentage_correct, counts=(3, 3, 3, 3)):
     }
 
 
-def test_sorts_worst_accuracy_first():
+def test_sorts_worst_accuracy_first() -> None:
     statistics = [_stat(1, 70), _stat(2, 40), _stat(3, 60)]
     subjects_by_id = {
         1: {"characters": "一"},
@@ -49,7 +54,7 @@ def test_sorts_worst_accuracy_first():
     assert items[2]["title"] == "70% 一"
 
 
-def test_falls_back_to_slug_then_id_when_no_characters():
+def test_falls_back_to_slug_then_id_when_no_characters() -> None:
     statistics = [_stat(1, 50), _stat(2, 50)]
     subjects_by_id = {1: {"slug": "some-radical"}}
 
@@ -60,7 +65,7 @@ def test_falls_back_to_slug_then_id_when_no_characters():
     assert items[1]["title"] == "50% #2"
 
 
-def test_excludes_low_attempt_items():
+def test_excludes_low_attempt_items() -> None:
     statistics = [_stat(1, 20, counts=(1, 1, 0, 0))]
 
     leeches = select_leeches(statistics)
@@ -69,7 +74,7 @@ def test_excludes_low_attempt_items():
     assert items[0]["title"] == "🎉 No leeches - great accuracy!"
 
 
-def test_limits_to_ten_results():
+def test_limits_to_ten_results() -> None:
     statistics = [_stat(i, 50) for i in range(15)]
 
     leeches = select_leeches(statistics)
@@ -79,7 +84,7 @@ def test_limits_to_ten_results():
     assert len(items) == max_results
 
 
-def test_no_leeches_shows_friendly_message():
+def test_no_leeches_shows_friendly_message() -> None:
     items = build_items([], {}, {}, {}, NOW)
 
     assert items == [
@@ -87,7 +92,7 @@ def test_no_leeches_shows_friendly_message():
     ]
 
 
-def test_appends_burn_eta_when_assignment_and_system_known():
+def test_appends_burn_eta_when_assignment_and_system_known() -> None:
     statistics = [_stat(1, 50)]
     subjects_by_id = {1: {"characters": "一", "spaced_repetition_system_id": 1}}
     assignments_by_id = {
@@ -101,7 +106,7 @@ def test_appends_burn_eta_when_assignment_and_system_known():
     assert "burns in" in items[0]["subtitle"]
 
 
-def test_omits_burn_eta_when_assignment_missing():
+def test_omits_burn_eta_when_assignment_missing() -> None:
     statistics = [_stat(1, 50)]
     subjects_by_id = {1: {"characters": "一", "spaced_repetition_system_id": 1}}
 

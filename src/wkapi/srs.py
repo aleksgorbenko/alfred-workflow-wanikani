@@ -1,14 +1,15 @@
 """ETA-to-burn math from WaniKani's spaced_repetition_systems interval tables."""
 
 import datetime as dt
+from typing import Any
 
 
 def _parse(timestamp: str) -> dt.datetime:
-    return dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    return dt.datetime.fromisoformat(timestamp)
 
 
 def _eta_to_stage(
-    available_at: str, srs_stage: int, srs_system: dict, target_position: int
+    available_at: str, srs_stage: int, srs_system: dict[str, Any], target_position: int
 ) -> dt.datetime | None:
     """Optimistic ETA to reach `target_position` if every review is passed on time."""
     if srs_stage >= target_position:
@@ -25,7 +26,7 @@ def _eta_to_stage(
 
 
 def eta_to_burn(
-    available_at: str, srs_stage: int, srs_system: dict
+    available_at: str, srs_stage: int, srs_system: dict[str, Any]
 ) -> dt.datetime | None:
     """Optimistic burn date if every remaining review is passed on time."""
     return _eta_to_stage(
@@ -34,7 +35,7 @@ def eta_to_burn(
 
 
 def eta_to_pass(
-    available_at: str, srs_stage: int, srs_system: dict
+    available_at: str, srs_stage: int, srs_system: dict[str, Any]
 ) -> dt.datetime | None:
     """Optimistic Guru (passing) date if every remaining review is passed on time."""
     return _eta_to_stage(

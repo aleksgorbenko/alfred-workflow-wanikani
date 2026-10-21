@@ -1,7 +1,12 @@
 from accuracy import build_items
 
 
-def _stat(meaning_correct, meaning_incorrect, reading_correct, reading_incorrect):
+def _stat(
+    meaning_correct: int,
+    meaning_incorrect: int,
+    reading_correct: int,
+    reading_incorrect: int,
+) -> dict[str, int]:
     return {
         "meaning_correct": meaning_correct,
         "meaning_incorrect": meaning_incorrect,
@@ -10,7 +15,7 @@ def _stat(meaning_correct, meaning_incorrect, reading_correct, reading_incorrect
     }
 
 
-def test_computes_overall_meaning_and_reading_percentages():
+def test_computes_overall_meaning_and_reading_percentages() -> None:
     statistics = [
         _stat(8, 2, 9, 1),
         _stat(6, 4, 10, 0),
@@ -24,7 +29,7 @@ def test_computes_overall_meaning_and_reading_percentages():
     assert items[2]["title"] == "🔤 Reading: 95%"
 
 
-def test_handles_no_statistics():
+def test_handles_no_statistics() -> None:
     items = build_items([])
 
     assert items[0]["title"] == "🎯 Overall accuracy: 0%"

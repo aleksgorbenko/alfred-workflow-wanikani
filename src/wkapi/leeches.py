@@ -3,6 +3,7 @@
 import datetime as dt
 import os
 import sys
+from typing import Any
 
 from alfred_items import TYPE_ICONS, emit, error_item, item
 from srs import eta_to_burn, format_days_until
@@ -20,7 +21,7 @@ MIN_ATTEMPTS = 8
 MAX_RESULTS = 10
 
 
-def _attempts(statistic: dict) -> int:
+def _attempts(statistic: dict[str, Any]) -> int:
     return (
         statistic["meaning_correct"]
         + statistic["meaning_incorrect"]
@@ -29,7 +30,7 @@ def _attempts(statistic: dict) -> int:
     )
 
 
-def select_leeches(statistics: list[dict]) -> list[dict]:
+def select_leeches(statistics: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(
         (s for s in statistics if _attempts(s) >= MIN_ATTEMPTS),
         key=lambda s: s["percentage_correct"],
@@ -37,14 +38,14 @@ def select_leeches(statistics: list[dict]) -> list[dict]:
 
 
 def _burn_eta_subtitle(
-    subject: dict,
-    assignment: dict | None,
-    systems_by_id: dict[int, dict],
+    subject: dict[str, Any],
+    assignment: dict[str, Any] | None,
+    systems_by_id: dict[int, dict[str, Any]],
     now: dt.datetime,
 ) -> str:
     if not assignment or assignment.get("srs_stage") is None:
         return ""
-    system = systems_by_id.get(subject.get("spaced_repetition_system_id"))
+    system = systems_by_id.get(subject.get("spaced_repetition_system_id", -1))
     if not system:
         return ""
     eta = eta_to_burn(assignment["available_at"], assignment["srs_stage"], system)
@@ -54,16 +55,16 @@ def _burn_eta_subtitle(
 
 
 def build_items(
-    leeches: list[dict],
-    subjects_by_id: dict[int, dict],
-    assignments_by_id: dict[int, dict],
-    systems_by_id: dict[int, dict],
+    leeches: list[dict[str, Any]],
+    subjects_by_id: dict[int, dict[str, Any]],
+    assignments_by_id: dict[int, dict[str, Any]],
+    systems_by_id: dict[int, dict[str, Any]],
     now: dt.datetime,
-) -> list[dict]:
+) -> list[dict[str, Any]]:
     if not leeches:
         return [item(title="🎉 No leeches - great accuracy!", valid=False)]
 
-    items = []
+    items: list[dict[str, Any]] = []
     for statistic in leeches:
         subject_id = statistic["subject_id"]
         subject = subjects_by_id.get(subject_id, {})

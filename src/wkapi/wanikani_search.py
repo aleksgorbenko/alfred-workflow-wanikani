@@ -11,7 +11,7 @@ from wanikani_api import ONE_HOUR, WanikaniError
 SEARCH_URL = "https://www.wanikani.com/search"
 
 
-class _SearchResultParser(HTMLParser):
+class SearchResultParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
         self.entries: list[dict[str, str]] = []
@@ -68,19 +68,21 @@ class _SearchResultParser(HTMLParser):
 
 def _fetch_html(query: str) -> str:
     url = f"{SEARCH_URL}?{urllib.parse.urlencode({'query': query})}"
-    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})  # noqa: S310
     try:
-        with urllib.request.urlopen(request, timeout=10) as response:
+        with urllib.request.urlopen(request, timeout=10) as response:  # noqa: S310
             return response.read().decode("utf-8")
     except urllib.error.HTTPError as error:
-        raise WanikaniError(f"WaniKani search returned HTTP {error.code}") from error
+        msg = f"WaniKani search returned HTTP {error.code}"
+        raise WanikaniError(msg) from error
     except urllib.error.URLError as error:
-        raise WanikaniError(f"Could not reach WaniKani: {error.reason}") from error
+        msg = f"Could not reach WaniKani: {error.reason}"
+        raise WanikaniError(msg) from error
 
 
 def search(query: str, ttl_seconds: int = ONE_HOUR) -> list[dict[str, str]]:
     cache_key = f"{SEARCH_URL}?query={query}"
     html = cached(cache_key, ttl_seconds, lambda: _fetch_html(query))
-    parser = _SearchResultParser()
+    parser = SearchResultParser()
     parser.feed(html)
     return parser.entries

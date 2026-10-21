@@ -4,6 +4,7 @@ import datetime as dt
 import math
 import os
 import sys
+from typing import Any
 
 from alfred_items import emit, error_item, item
 from srs import eta_to_pass
@@ -22,7 +23,7 @@ REQUIRED_KANJI_FRACTION = 0.9
 
 
 def _parse(timestamp: str) -> dt.datetime:
-    return dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    return dt.datetime.fromisoformat(timestamp)
 
 
 def _duration(start: str, end: str | None, now: dt.datetime) -> str:
@@ -33,11 +34,11 @@ def _duration(start: str, end: str | None, now: dt.datetime) -> str:
 
 
 def next_level_item(
-    kanji_subjects: list[dict],
-    kanji_assignments: list[dict],
-    systems_by_id: dict[int, dict],
+    kanji_subjects: list[dict[str, Any]],
+    kanji_assignments: list[dict[str, Any]],
+    systems_by_id: dict[int, dict[str, Any]],
     now: dt.datetime,
-) -> dict:
+) -> dict[str, Any]:
     total = len(kanji_subjects)
     assignments_by_subject = {a["subject_id"]: a for a in kanji_assignments}
     passed = sum(1 for a in kanji_assignments if a.get("passed_at") is not None)
@@ -57,14 +58,14 @@ def next_level_item(
             icon=ICON,
         )
 
-    etas = []
+    etas: list[dt.datetime] = []
     for subject in kanji_subjects:
         assignment = assignments_by_subject.get(subject["id"])
         if not assignment or assignment.get("passed_at") is not None:
             continue
         available_at = assignment.get("available_at")
         srs_stage = assignment.get("srs_stage")
-        system = systems_by_id.get(subject.get("spaced_repetition_system_id"))
+        system = systems_by_id.get(subject.get("spaced_repetition_system_id", -1))
         if not available_at or srs_stage is None or not system:
             continue
         eta = eta_to_pass(available_at, srs_stage, system)
@@ -95,8 +96,10 @@ def next_level_item(
     )
 
 
-def build_items(progressions: list[dict], now: dt.datetime) -> list[dict]:
-    items = []
+def build_items(
+    progressions: list[dict[str, Any]], now: dt.datetime
+) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
     for progression in sorted(progressions, key=lambda p: p["level"], reverse=True):
         started_at = progression.get("started_at")
         if not started_at:
