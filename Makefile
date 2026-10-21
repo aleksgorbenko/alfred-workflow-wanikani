@@ -1,22 +1,46 @@
 DIST := dist
 NAME := WaniKani.alfredworkflow
 BUILD := $(DIST)/.build
+RUN := uv run --no-sync
+JSON_FILES := $(shell git ls-files '*.json')
+export HOMEBREW_NO_AUTO_UPDATE := 1
 
-.PHONY: test lint format format-check check clean build verify release sync-plist link-live
+.PHONY: setup test lint lint-python lint-data lint-md lint-actions format format-check audit check ci clean build verify release sync-plist link-live
+
+setup:
+	brew bundle --quiet
+	uv sync --group dev
 
 test:
-	python3 -m pytest
+	$(RUN) pytest
 
-lint:
-	ruff check .
+lint: lint-python lint-data lint-md lint-actions
+
+lint-python:
+	$(RUN) ruff check .
+
+lint-data:
+	plutil -lint info.plist
+	$(if $(JSON_FILES),jq empty $(JSON_FILES))
+
+lint-md:
+	markdownlint-cli2 "**/*.md"
+
+lint-actions:
+	actionlint
 
 format:
-	ruff format .
+	$(RUN) ruff format .
 
 format-check:
-	ruff format --check .
+	$(RUN) ruff format --check .
+
+audit:
+	$(RUN) pip-audit --skip-editable
 
 check: lint format-check test
+
+ci: check audit
 
 clean:
 	find . -name '__pycache__' -not -path './.git/*' -exec rm -rf {} +
@@ -41,7 +65,7 @@ build: check
 # audits the built bundle for local paths, baked-in tokens, junk files,
 # unresolved script references, and import errors.
 verify:
-	python3 tools/verify_bundle.py $(DIST)/$(NAME)
+	$(RUN) python tools/verify_bundle.py $(DIST)/$(NAME)
 
 release: build verify
 	@test -n "$(VERSION)" || (echo "usage: make release VERSION=v1.0.0" && exit 1)

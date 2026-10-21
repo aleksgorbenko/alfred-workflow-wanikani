@@ -1,4 +1,24 @@
-# WaniKani for Alfred
+<p align="center">
+  <img src="icon.png" width="128" alt="WaniKani for Alfred icon">
+</p>
+
+<h1 align="center">WaniKani for Alfred</h1>
+
+<p align="center">Check WaniKani progress and search subjects from Alfred.</p>
+
+<p align="center">
+  <a href="https://github.com/aleksgorbenko/alfred-workflow-wanikani/actions/workflows/ci.yml"><img src="https://github.com/aleksgorbenko/alfred-workflow-wanikani/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+  <a href="https://github.com/aleksgorbenko/alfred-workflow-wanikani/releases/latest"><img src="https://img.shields.io/github/v/release/aleksgorbenko/alfred-workflow-wanikani?label=release&color=4c8dff" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue" alt="Licence MIT"></a>
+  <img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple" alt="macOS 14 or later">
+  <a href="https://www.alfredapp.com/powerpack/"><img src="https://img.shields.io/badge/Alfred-5%20Powerpack-5c1f87" alt="Alfred 5 Powerpack"></a>
+</p>
+
+<p align="center">
+  <a href="#usage">Usage</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#development">Development</a>
+</p>
 
 Check WaniKani progress and search WaniKani subjects from Alfred.
 
@@ -17,7 +37,6 @@ Open the Summary view to see your current WaniKani progress.
 
 ![WaniKani progress summary](images/about/summary.png)
 
-
 ## Install
 
 1. Download the latest `WaniKani.alfredworkflow` from [Releases](https://github.com/aleksgorbenko/alfred-workflow-wanikani/releases).
@@ -31,6 +50,8 @@ Open the Summary view to see your current WaniKani progress.
 - Maintainer tools are in `tools/`.
 
 ```sh
+make setup   # install dev tools and the Python environment
+make ci      # everything CI runs
 make check   # lint, format check, and tests
 make build   # package dist/WaniKani.alfredworkflow
 make verify  # audit the built bundle
