@@ -5,11 +5,15 @@ RUN := uv run --no-sync
 JSON_FILES := $(shell git ls-files '*.json')
 export HOMEBREW_NO_AUTO_UPDATE := 1
 
-.PHONY: setup test lint lint-python lint-data lint-md lint-actions format format-check audit check ci clean build verify release sync-plist link-live
+.PHONY: setup icons test lint lint-python lint-data lint-md lint-actions format format-check audit check ci clean build verify release sync-plist link-live
 
 setup:
 	brew bundle --quiet
 	uv sync --group dev
+
+icons:
+	$(RUN) --with pillow python tools/gen_icons.py
+	$(RUN) --with pillow python tools/gen_command_icons.py
 
 test:
 	$(RUN) pytest
@@ -18,7 +22,7 @@ lint: lint-python lint-data lint-md lint-actions
 
 lint-python:
 	$(RUN) ruff check .
-	$(RUN) pyright
+	$(RUN) --with pillow pyright
 
 lint-data:
 	plutil -lint info.plist
