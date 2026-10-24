@@ -4,6 +4,7 @@ import datetime as dt
 from typing import Any
 
 from alfred_items import TYPE_ICONS, item
+from wanikani_api import get_subjects, get_summary
 
 DASHBOARD_URL = "https://www.wanikani.com/dashboard"
 SUBJECTS_TTL = 3 * 60 * 60
@@ -69,3 +70,16 @@ def build_items(
         items.append(item(title=title, subtitle=subtitle, arg=DASHBOARD_URL, icon=icon))
 
     return items
+
+
+def queue_items(token: str, bucket: str, empty_message: str) -> list[dict[str, Any]]:
+    summary = get_summary(token)
+    subject_ids = available_subject_ids(summary[bucket], dt.datetime.now(dt.UTC))
+    subjects = (
+        get_subjects(
+            token, ttl_seconds=SUBJECTS_TTL, ids=",".join(map(str, subject_ids))
+        )
+        if subject_ids
+        else []
+    )
+    return build_items(subject_ids, {s["id"]: s for s in subjects}, empty_message)

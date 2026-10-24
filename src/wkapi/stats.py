@@ -1,11 +1,9 @@
 """Script Filter: WaniKani SRS stage breakdown."""
 
-import os
-import sys
 from typing import Any
 
-from alfred_items import emit, error_item, item
-from wanikani_api import WanikaniError, get_assignments
+from alfred_items import item
+from wanikani_api import get_assignments
 
 DASHBOARD_URL = "https://www.wanikani.com/dashboard"
 ICON = "icons/icon_stats.png"
@@ -41,26 +39,5 @@ def build_items(assignments: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
-def main() -> None:
-    token = os.environ.get("WANIKANI_API_TOKEN", "").strip()
-    if not token:
-        emit(
-            [
-                error_item(
-                    "No WaniKani API token set - add it in the workflow configuration"
-                )
-            ]
-        )
-        return
-
-    try:
-        assignments = get_assignments(token, started="true")
-    except WanikaniError as error:
-        emit([error_item(str(error))])
-        return
-
-    emit(build_items(assignments))
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+def load(token: str) -> list[dict[str, Any]]:
+    return build_items(get_assignments(token, started="true"))

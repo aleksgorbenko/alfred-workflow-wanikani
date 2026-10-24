@@ -57,16 +57,13 @@ clean:
 
 build: check
 	rm -rf $(DIST)
-	mkdir -p $(BUILD)/src/wkapi $(BUILD)/icons "$(BUILD)/List Filter Images" "$(BUILD)/images/about"
+	mkdir -p $(BUILD)/src/wkapi $(BUILD)/icons "$(BUILD)/images/about"
 	cp info.plist $(BUILD)/
 	cp icon.png $(BUILD)/
 	cp *.png $(BUILD)/
 	cp src/wkapi/*.py $(BUILD)/src/wkapi/
 	cp images/about/*.png "$(BUILD)/images/about/"
 	cp icons/*.png $(BUILD)/icons/
-	cp icons/icon_summary.png icons/icon_levels.png icons/icon_stats.png \
-		icons/icon_accuracy.png icons/icon_leeches.png icons/icon_lessons.png \
-		icons/icon_reviews.png "$(BUILD)/List Filter Images/"
 	mkdir -p $(BUILD)/src
 	cp src/maintenance.sh $(BUILD)/src/
 	cd $(BUILD) && zip -r -q ../$(NAME) .
@@ -107,8 +104,4 @@ link-live:
 		[ "$$icon" = "icon.png" ] || ln -sfn "$(CURDIR)/$$icon" "$(WORKFLOW_DIR)/$$icon"; \
 	done
 	ln -sfn "$(CURDIR)/Makefile" "$(WORKFLOW_DIR)/Makefile"
-	mkdir -p "$(WORKFLOW_DIR)/List Filter Images"
-	for name in summary levels stats accuracy leeches lessons reviews; do \
-		ln -sfn "$(CURDIR)/icons/icon_$$name.png" "$(WORKFLOW_DIR)/List Filter Images/icon_$$name.png"; \
-	done
 	@echo "linked $(WORKFLOW_DIR) to this repo"

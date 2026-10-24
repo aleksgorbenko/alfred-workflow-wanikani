@@ -1,14 +1,11 @@
 """Script Filter: WaniKani leeches (low-accuracy items you keep missing)."""
 
 import datetime as dt
-import os
-import sys
 from typing import Any
 
-from alfred_items import TYPE_ICONS, emit, error_item, item
+from alfred_items import TYPE_ICONS, item
 from srs import eta_to_burn, format_days_until
 from wanikani_api import (
-    WanikaniError,
     get_assignments,
     get_review_statistics,
     get_spaced_repetition_systems,
@@ -92,46 +89,17 @@ def build_items(
     return items
 
 
-def main() -> None:
-    token = os.environ.get("WANIKANI_API_TOKEN", "").strip()
-    if not token:
-        emit(
-            [
-                error_item(
-                    "No WaniKani API token set - add it in the workflow configuration"
-                )
-            ]
-        )
-        return
-
-    try:
-        statistics = get_review_statistics(
-            token, percentages_less_than=str(MAX_PERCENTAGE)
-        )
-        leeches = select_leeches(statistics)
-        subject_ids = ",".join(str(s["subject_id"]) for s in leeches)
-        subjects = get_subjects(token, ids=subject_ids) if subject_ids else []
-        assignments = (
-            get_assignments(token, subject_ids=subject_ids) if subject_ids else []
-        )
-        systems = get_spaced_repetition_systems(token)
-    except WanikaniError as error:
-        emit([error_item(str(error))])
-        return
-
-    subjects_by_id = {s["id"]: s for s in subjects}
-    assignments_by_id = {a["subject_id"]: a for a in assignments}
-    systems_by_id = {s["id"]: s for s in systems}
-    emit(
-        build_items(
-            leeches,
-            subjects_by_id,
-            assignments_by_id,
-            systems_by_id,
-            dt.datetime.now(dt.UTC),
-        )
+def load(token: str) -> list[dict[str, Any]]:
+    statistics = get_review_statistics(token, percentages_less_than=str(MAX_PERCENTAGE))
+    leeches = select_leeches(statistics)
+    subject_ids = ",".join(str(s["subject_id"]) for s in leeches)
+    subjects = get_subjects(token, ids=subject_ids) if subject_ids else []
+    assignments = get_assignments(token, subject_ids=subject_ids) if subject_ids else []
+    systems = get_spaced_repetition_systems(token)
+    return build_items(
+        leeches,
+        {s["id"]: s for s in subjects},
+        {a["subject_id"]: a for a in assignments},
+        {s["id"]: s for s in systems},
+        dt.datetime.now(dt.UTC),
     )
-
-
-if __name__ == "__main__":
-    sys.exit(main())

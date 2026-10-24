@@ -1,42 +1,35 @@
 from unittest.mock import MagicMock, patch
 
-from lessons import main
+import lessons
+import reviews
+
+BUCKET = {"available_at": "2020-01-01T00:00:00.000000Z", "subject_ids": [1, 2]}
+SUBJECTS: list[dict[str, object]] = [
+    {"id": 1, "subject_type": "kanji", "characters": "大", "meanings": []},
+    {"id": 2, "subject_type": "kanji", "characters": "小", "meanings": []},
+]
+SUMMARY = {"lessons": [BUCKET], "reviews": []}
 
 
-@patch("lessons.get_subjects")
-@patch("lessons.get_summary")
-@patch("lessons.emit")
-def test_uses_lessons_bucket_from_summary(
-    mock_emit: MagicMock, mock_get_summary: MagicMock, mock_get_subjects: MagicMock
+@patch("subject_queue.get_subjects", return_value=SUBJECTS)
+@patch("subject_queue.get_summary", return_value=SUMMARY)
+def test_lessons_use_lessons_bucket(
+    mock_get_summary: MagicMock, mock_get_subjects: MagicMock
 ) -> None:
-    mock_get_summary.return_value = {
-        "lessons": [
-            {
-                "available_at": "2020-01-01T00:00:00.000000Z",
-                "subject_ids": [1, 2],
-            }
-        ]
-    }
-    mock_get_subjects.return_value = [
-        {"id": 1, "subject_type": "kanji", "characters": "大", "meanings": []},
-        {"id": 2, "subject_type": "kanji", "characters": "小", "meanings": []},
-    ]
-
-    with patch.dict("os.environ", {"WANIKANI_API_TOKEN": "token"}):
-        main()
-
+    rows = lessons.load("token")
+    mock_get_summary.assert_called_once_with("token")
     mock_get_subjects.assert_called_once_with(
         "token", ttl_seconds=3 * 60 * 60, ids="1,2"
     )
-    items = mock_emit.call_args[0][0]
-    expected_count = 2
-    assert len(items) == expected_count
+    assert [row["title"] for row in rows] == ["大", "小"]
 
 
-@patch("lessons.emit")
-def test_missing_token_emits_error(mock_emit: MagicMock) -> None:
-    with patch.dict("os.environ", {"WANIKANI_API_TOKEN": ""}):
-        main()
-
-    items = mock_emit.call_args[0][0]
-    assert items[0]["valid"] is False
+@patch("subject_queue.get_subjects")
+@patch("subject_queue.get_summary", return_value=SUMMARY)
+def test_empty_reviews_skip_subject_fetch(
+    mock_get_summary: MagicMock, mock_get_subjects: MagicMock
+) -> None:
+    rows = reviews.load("token")
+    mock_get_summary.assert_called_once_with("token")
+    mock_get_subjects.assert_not_called()
+    assert rows[0]["title"] == "🎉 No reviews available"

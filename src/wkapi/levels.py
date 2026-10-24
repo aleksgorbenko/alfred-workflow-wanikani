@@ -2,14 +2,11 @@
 
 import datetime as dt
 import math
-import os
-import sys
 from typing import Any
 
-from alfred_items import emit, error_item, item
+from alfred_items import item
 from srs import eta_to_pass
 from wanikani_api import (
-    WanikaniError,
     get_assignments,
     get_level_progressions,
     get_spaced_repetition_systems,
@@ -125,36 +122,14 @@ def build_items(
     return items
 
 
-def main() -> None:
-    token = os.environ.get("WANIKANI_API_TOKEN", "").strip()
-    if not token:
-        emit(
-            [
-                error_item(
-                    "No WaniKani API token set - add it in the workflow configuration"
-                )
-            ]
-        )
-        return
-
-    try:
-        progressions = get_level_progressions(token)
-        level = get_user(token)["level"]
-        kanji_subjects = get_subjects(token, levels=str(level), types="kanji")
-        kanji_assignments = get_assignments(
-            token, levels=str(level), subject_types="kanji"
-        )
-        systems = get_spaced_repetition_systems(token)
-    except WanikaniError as error:
-        emit([error_item(str(error))])
-        return
-
+def load(token: str) -> list[dict[str, Any]]:
+    progressions = get_level_progressions(token)
+    level = get_user(token)["level"]
+    kanji_subjects = get_subjects(token, levels=str(level), types="kanji")
+    kanji_assignments = get_assignments(token, levels=str(level), subject_types="kanji")
+    systems = get_spaced_repetition_systems(token)
     systems_by_id = {s["id"]: s for s in systems}
     now = dt.datetime.now(dt.UTC)
     items = [next_level_item(kanji_subjects, kanji_assignments, systems_by_id, now)]
     items.extend(build_items(progressions, now))
-    emit(items)
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+    return items

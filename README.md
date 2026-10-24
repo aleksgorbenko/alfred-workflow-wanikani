@@ -29,6 +29,13 @@ Check WaniKani progress and search WaniKani subjects from Alfred.
 | `wk` | Browse lessons, reviews, level history, SRS statistics, accuracy, and leeches. |
 | `wks` | Search WaniKani radicals, kanji, and vocabulary as you type. Select a result to open its WaniKani page. |
 
+- `wk <page>` opens a page: `summary`, `levels`, `stats`, `accuracy`, `leeches`, `lessons`, `reviews`.
+- Text after the page filters its rows, e.g. `wk lessons 水`.
+- Delete the page name to go back to the menu.
+- Pages load in the background: `Loading <page>…` shows until the data arrives, then cached pages open instantly.
+- First row on every page is the page itself: `Enter` opens the dashboard, `Tab` goes back.
+- `Tab` on Lessons or Reviews available in Summary opens that queue.
+
 ![WaniKani progress menu](images/about/main.png)
 
 ![WaniKani subject search](images/about/search.png)

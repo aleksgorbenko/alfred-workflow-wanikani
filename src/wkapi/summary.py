@@ -1,12 +1,10 @@
 """Script Filter: WaniKani summary (lessons/reviews available now)."""
 
 import datetime as dt
-import os
-import sys
 from typing import Any
 
-from alfred_items import emit, error_item, item
-from wanikani_api import WanikaniError, get_summary, get_user
+from alfred_items import item
+from wanikani_api import get_summary, get_user
 
 DASHBOARD_URL = "https://www.wanikani.com/dashboard"
 LESSONS_URL = "https://www.wanikani.com/subject-lessons/start"
@@ -44,13 +42,15 @@ def build_items(
             subtitle="Open lesson queue",
             arg=LESSONS_URL,
             icon=ICON,
-        ),
+        )
+        | {"autocomplete": "lessons "},
         item(
             title=f"🔁 Reviews available: {reviews_available}",
             subtitle="Open review queue",
             arg=REVIEWS_URL,
             icon=ICON,
-        ),
+        )
+        | {"autocomplete": "reviews "},
     ]
 
     next_reviews_at = summary.get("next_reviews_at")
@@ -68,27 +68,7 @@ def build_items(
     return items
 
 
-def main() -> None:
-    token = os.environ.get("WANIKANI_API_TOKEN", "").strip()
-    if not token:
-        emit(
-            [
-                error_item(
-                    "No WaniKani API token set - add it in the workflow configuration"
-                )
-            ]
-        )
-        return
-
-    try:
-        summary = get_summary(token)
-        level = get_user(token)["level"]
-    except WanikaniError as error:
-        emit([error_item(str(error))])
-        return
-
-    emit(build_items(summary, level, dt.datetime.now(dt.UTC)))
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+def load(token: str) -> list[dict[str, Any]]:
+    summary = get_summary(token)
+    level = get_user(token)["level"]
+    return build_items(summary, level, dt.datetime.now(dt.UTC))
