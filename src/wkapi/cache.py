@@ -38,3 +38,7 @@ def cached[T](key: str, ttl_seconds: int, fetch: Callable[[], T]) -> T:
     value = fetch()
     path.write_text(json.dumps(value))
     return value
+
+
+def forget(key: str) -> None:
+    _cache_path(key).unlink(missing_ok=True)

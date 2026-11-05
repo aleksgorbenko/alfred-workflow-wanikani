@@ -83,3 +83,39 @@ def test_search_propagates_wanikani_error(mock_fetch_html: MagicMock) -> None:
 
     with pytest.raises(WanikaniError, match="boom"):
         search("substitute")
+
+
+@patch("wanikani_search._fetch_html")
+def test_search_caches_hits_but_not_empty_results(
+    mock_fetch_html: MagicMock,
+) -> None:
+    mock_fetch_html.return_value = SAMPLE_HTML
+    search("substitute")
+    search("substitute")
+    assert mock_fetch_html.call_count == 1
+
+    mock_fetch_html.reset_mock()
+    mock_fetch_html.return_value = "<html></html>"
+    assert search("nothing") == []
+    assert search("nothing") == []
+    assert mock_fetch_html.call_count == len(("first", "second"))
+
+
+@patch("wanikani_search._fetch_html")
+def test_romaji_queries_fall_back_to_kana(mock_fetch_html: MagicMock) -> None:
+    def fetch(query: str) -> str:
+        return SAMPLE_HTML if query == "たべる" else "<html></html>"
+
+    mock_fetch_html.side_effect = fetch
+    assert search("taberu")
+    assert [call.args[0] for call in mock_fetch_html.call_args_list] == [
+        "taberu",
+        "たべる",
+    ]
+
+
+@patch("wanikani_search._fetch_html", return_value="<html></html>")
+def test_unconvertible_queries_are_not_retried(mock_fetch_html: MagicMock) -> None:
+    assert search("zzq") == []
+    assert search("日本語") == []
+    assert mock_fetch_html.call_count == len(("zzq", "日本語"))

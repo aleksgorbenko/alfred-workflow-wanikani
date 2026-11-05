@@ -14,6 +14,7 @@ API_REVISION = "20170710"
 
 ONE_HOUR = 3600
 ONE_DAY = 86400
+ONE_MONTH = 30 * ONE_DAY
 
 
 class WanikaniError(Exception):

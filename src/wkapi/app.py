@@ -93,7 +93,7 @@ def _menu(text: str) -> list[Row]:
 def _header(page: Page) -> Row:
     return item(
         page.title,
-        subtitle=f"{page.subtitle}{SEPARATOR}Enter opens the dashboard",
+        subtitle=f"{page.subtitle} · ↩ Open dashboard",
         arg=DASHBOARD_URL,
         icon=_icon(page),
     ) | {"autocomplete": ""}

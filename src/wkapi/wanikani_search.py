@@ -5,8 +5,9 @@ import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
 
-from cache import cached
-from wanikani_api import ONE_HOUR, WanikaniError
+from cache import cached, forget
+from romaji import to_hiragana
+from wanikani_api import ONE_MONTH, WanikaniError
 
 SEARCH_URL = "https://www.wanikani.com/search"
 
@@ -80,9 +81,21 @@ def _fetch_html(query: str) -> str:
         raise WanikaniError(msg) from error
 
 
-def search(query: str, ttl_seconds: int = ONE_HOUR) -> list[dict[str, str]]:
+def _lookup(query: str, ttl_seconds: int) -> list[dict[str, str]]:
     cache_key = f"{SEARCH_URL}?query={query}"
     html = cached(cache_key, ttl_seconds, lambda: _fetch_html(query))
     parser = SearchResultParser()
     parser.feed(html)
+    if not parser.entries:
+        forget(cache_key)
     return parser.entries
+
+
+def search(query: str, ttl_seconds: int = ONE_MONTH) -> list[dict[str, str]]:
+    entries = _lookup(query, ttl_seconds)
+    if entries or not query.isascii():
+        return entries
+    kana = to_hiragana(query.strip())
+    if any(char.isascii() and char.isalpha() for char in kana):
+        return entries
+    return _lookup(kana, ttl_seconds)

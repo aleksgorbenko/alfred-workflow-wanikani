@@ -12,9 +12,8 @@ setup:
 	uv sync --group dev
 
 icons:
-	$(RUN) --with pillow python tools/gen_icons.py
-	$(RUN) --with pillow python tools/gen_command_icons.py
-	for icon in icons/icon_*.png; do icon-polish.sh "$$icon" "$$icon" --size 512; done
+	icon-symbol.sh --batch tools/icons.txt --outdir icons --size 256 --fg "#FFFFFF" --style macos
+	icon-symbol.sh --batch tools/nodes.txt --outdir . --size 1024 --fg "#FFFFFF" --style macos
 
 test:
 	$(RUN) pytest

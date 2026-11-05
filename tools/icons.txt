@@ -1,0 +1,12 @@
+# name symbol background; rendered by make icons
+icon_radical puzzlepiece.fill #4CA8F8
+icon_kanji character.book.closed.fill #EA33A7
+icon_vocabulary text.book.closed.fill #9C1FF6
+icon_summary list.bullet.clipboard.fill #FF00AA
+icon_levels chart.bar.xaxis #FF00AA
+icon_stats chart.xyaxis.line #FF00AA
+icon_accuracy scope #FF00AA
+icon_leeches ladybug.fill #FF00AA
+icon_lessons books.vertical.fill #FF00AA
+icon_reviews arrow.triangle.2.circlepath #FF00AA
+maintenance_clear trash.fill #FF453A
